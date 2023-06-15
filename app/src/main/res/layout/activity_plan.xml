@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Vistas.PlanActivity">
+
+    <include
+        layout="@layout/toolbar_actividad"
+        android:id="@+id/toolbar_actividad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Layout para la creación de una nueva actividad -->
+    <LinearLayout
+        android:id="@+id/layout_nueva_actividad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_actividad"
+        app:layout_constraintBottom_toTopOf="@id/recyclerViewActividad">
+
+        <!-- Spinner para elegir el momento del día -->
+        <Spinner
+            android:id="@+id/spinner_momento_dia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp" />
+
+        <!-- EditText para la descripción de la actividad -->
+        <EditText
+            android:id="@+id/editText_descripcion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/descripcion"
+            android:minHeight="48dp" />
+        <EditText
+            android:id="@+id/editText_notas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/notas" />
+
+        <!-- Botón para guardar la actividad -->
+        <Button
+            android:id="@+id/button_guardar_actividad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/guardar" />
+
+    </LinearLayout>
+
+    <!-- RecyclerView para mostrar las actividades -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewActividad"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/layout_nueva_actividad"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

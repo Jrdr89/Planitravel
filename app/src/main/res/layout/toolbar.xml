@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/colorPrimary"
+    android:elevation="4dp"
+    app:contentInsetStartWithNavigation="0dp">
+
+    <ImageView
+        android:id="@+id/icon_calendar"
+        android:layout_width="68dp"
+        android:layout_height="48dp"
+        android:src="@drawable/icon_calendar"
+        android:layout_gravity="start"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"/>
+
+    <TextView
+        android:id="@+id/toolbar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/icon_borrar"
+        android:layout_width="68dp"
+        android:layout_height="48dp"
+        android:src="@drawable/borrar"
+        android:layout_gravity="right"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"/>
+
+
+</androidx.appcompat.widget.Toolbar>
