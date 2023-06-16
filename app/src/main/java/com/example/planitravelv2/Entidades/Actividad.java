@@ -8,6 +8,7 @@ import java.util.Random;
 
 public class Actividad implements Serializable {
 
+    private int id;
     private String momentoDia;
     private String descripcion;
     private String notas;
@@ -27,6 +28,14 @@ public class Actividad implements Serializable {
         this.descripcion = descripcion;
         this.notas = notas;
         this.dia = dia;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getMomentoDia() {

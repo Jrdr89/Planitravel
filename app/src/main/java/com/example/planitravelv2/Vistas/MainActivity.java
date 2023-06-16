@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Inicializar la base de datos
         databaseHelper = new DatabaseHelper(this);
-        Holder.setDataBade(databaseHelper);
+        /*Holder.setDataBade(databaseHelper);*/
 
         // Obtener los objetos DiaViaje y mostrarlos en el RecyclerView
         obtenerDiaViajeDesdeSQLite();

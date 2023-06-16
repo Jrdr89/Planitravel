@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.planitravelv2.Entidades.DiaViaje;
-import com.example.planitravelv2.PruebaActivity;
 import com.example.planitravelv2.R;
 import com.example.planitravelv2.Vistas.PlanActivity;
 

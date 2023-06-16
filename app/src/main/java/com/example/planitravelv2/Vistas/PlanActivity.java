@@ -21,47 +21,63 @@ import com.example.planitravelv2.Adaptadores.ActividadAdapter;
 import com.example.planitravelv2.Adaptadores.SpinnerAdapter;
 import com.example.planitravelv2.Entidades.Actividad;
 import com.example.planitravelv2.Entidades.DiaViaje;
+import com.example.planitravelv2.Entidades.Holder;
 import com.example.planitravelv2.R;
 import com.example.planitravelv2.SQlite.DatabaseHelper;
+import com.google.android.material.transition.Hold;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlanActivity extends AppCompatActivity {
+public class PlanActivity extends AppCompatActivity  {
 
     private RecyclerView recyclerView;
     private ActividadAdapter actividadAdapter;
     private List<String> spinnerOptions;
-
-    private ArrayList<Actividad> listaActividades;
+    //Componentes Layout Nuevo
+    private Spinner spinnerMomentoDia;
+    private  EditText editTextDescripcion;
+    private EditText editTextNotas;
+    private DiaViaje diaViaje;
+    private ArrayList<Actividad> listaActividades = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
 
-        // Obtener el Intent y el objeto DiaViaje
-        Intent intent = getIntent();
-        DiaViaje diaViaje = (DiaViaje) intent.getSerializableExtra("diaViaje");
+        // Configurar el RecyclerView y el ActividadAdapter
+        recyclerView = findViewById(R.id.recyclerViewActividad);
 
         //Obtener iconos del toolbar
         ImageView icon_añadir= findViewById(R.id.icon_añadir);
         ImageView icon_atras = findViewById(R.id.icon_atras);
 
-        // Obtener la lista de Actividades del DiaViaje
 
-        listaActividades = (ArrayList<Actividad>) diaViaje.getActividad();
-       /* listaActividades = (ArrayList<Actividad>) Actividad.generarListaActividadesAleatorias(5);*/
+        // Obtener el Intent y el objeto DiaViaje
+        Intent intent = getIntent();
+        // Verificar si contiene el dato extra "actualizacionRecyclerView" y su valor es verdadero
+        boolean actualizarRecyclerView = intent.getBooleanExtra("actualizacionRecyclerView", false);
 
-        // Configurar el RecyclerView y el ActividadAdapter
-        recyclerView = findViewById(R.id.recyclerViewActividad);
+        if (actualizarRecyclerView) {
+            eliminarActividadDeSQLite(Holder.getActividad());
+            Holder.setActividad(null);
+            diaViaje=Holder.getDiaViaje();
+        }else{
+            diaViaje = (DiaViaje) intent.getSerializableExtra("diaViaje");
+            Holder.setDiaViaje(diaViaje);
+            // Obtener la lista de Actividades del DiaViaje
+            listaActividades = (ArrayList<Actividad>) diaViaje.getActividad();
+        }
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        actividadAdapter = new ActividadAdapter(listaActividades);
+        actividadAdapter = new ActividadAdapter(listaActividades,this);
+
         recyclerView.setAdapter(actividadAdapter);
 
         //Obtener la referencia del layout
         LinearLayout layoutNuevaActividad = findViewById(R.id.layout_nueva_actividad);
 
-        Spinner spinnerMomentoDia = findViewById(R.id.spinner_momento_dia);
+        spinnerMomentoDia = findViewById(R.id.spinner_momento_dia);
         // Generar array para el spinner
         spinnerOptions = generarSpinnerOptions();
 
@@ -70,13 +86,15 @@ public class PlanActivity extends AppCompatActivity {
         spinnerMomentoDia.setAdapter(spinnerAdapter);
 
         //Componentes del Layout para crear nueva actividad
-        EditText editTextDescripcion = findViewById(R.id.editText_descripcion);
-        EditText editTextNotas = findViewById(R.id.editText_notas);
+        editTextDescripcion = findViewById(R.id.editText_descripcion);
+        editTextNotas = findViewById(R.id.editText_notas);
         Button buttonGuardarActividad = findViewById(R.id.button_guardar_actividad);
 
 
         //Actualizar datos
         obtenerActividadesPorDia(diaViaje);
+
+
 
         //Método para mostrar Layaut que permite crear nueva actividad
         icon_añadir.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +195,7 @@ public class PlanActivity extends AppCompatActivity {
                 String ubicacion = cursor.getString(ubicacionColumnIndex);
 
                 Actividad actividad = new Actividad(Dia, momentoDia, descripcion, notas, ubicacion);
+                actividad.setId(actividadId);
                 listaActividades.add(actividad);
             } while (cursor.moveToNext());
         }
@@ -208,7 +227,38 @@ public class PlanActivity extends AppCompatActivity {
         }
 
         db.close();
+        borrar();
     }
+    private void eliminarActividadDeSQLite(Actividad actividad) {
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        String whereClause = DatabaseHelper.COLUMN_ACTIVIDAD_DIA + " = ? AND " +
+                DatabaseHelper.COLUMN_ACTIVIDAD_MOMENTO_DIA + " = ? AND " +
+                DatabaseHelper.COLUMN_ACTIVIDAD_DESCRIPCION + " = ? AND " +
+                DatabaseHelper.COLUMN_ACTIVIDAD_NOTAS + " = ?";
+
+        String[] whereArgs = {actividad.getDia(), actividad.getMomentoDia(), actividad.getDescripcion(), actividad.getNotas()};
+
+        int resultado = db.delete(DatabaseHelper.TABLE_ACTIVIDAD_DIA, whereClause, whereArgs);
+
+        if (resultado > 0) {
+            // Éxito al eliminar la actividad de SQLite
+            Toast.makeText(this, "Actividad eliminada de SQLite", Toast.LENGTH_SHORT).show();
+        } else {
+            // No se pudo eliminar la actividad de SQLite
+            Toast.makeText(this, "Error al eliminar la actividad de SQLite", Toast.LENGTH_SHORT).show();
+        }
+        listaActividades.remove(actividad);
+        db.close();
+    }
+
+    private void borrar(){
+       spinnerMomentoDia.setSelection(0);
+       editTextNotas.setText("");
+       editTextDescripcion.setText("");
+    }
+
 
 
 

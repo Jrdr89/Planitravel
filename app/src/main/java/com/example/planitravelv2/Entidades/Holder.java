@@ -4,13 +4,23 @@ import com.example.planitravelv2.SQlite.DatabaseHelper;
 
 public class Holder {
 
-    private static DatabaseHelper dataBade;
+    private static DiaViaje diaViaje;
+    private static Actividad actividad;
 
-    public static DatabaseHelper getDataBade() {
-        return dataBade;
+    public static DiaViaje getDiaViaje() {
+        return diaViaje;
     }
 
-    public static void setDataBade(DatabaseHelper dataBade) {
-        Holder.dataBade = dataBade;
+    public static void setDiaViaje(DiaViaje diaViaje) {
+        Holder.diaViaje = diaViaje;
+    }
+
+    public static Actividad getActividad() {
+        return actividad;
+    }
+
+    public static void setActividad(Actividad actividad) {
+        Holder.actividad = actividad;
     }
 }
+
